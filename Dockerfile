@@ -61,8 +61,7 @@ RUN apt-get update \
     /var/spool/slurm/ctld \
     /var/spool/slurm/d \
     /var/log/slurm \
-    && chown slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm; \
-    fi
+    && chown slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
 
 RUN rm -rf /tmp/slurm*
 
