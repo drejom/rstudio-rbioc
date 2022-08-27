@@ -45,7 +45,8 @@ RUN wget https://github.com/dnanexus/dxfuse/releases/download/v0.23.2/dxfuse-lin
     && chmod +x /usr/local/bin/dxfuse
 
 # # Install SLURM
-ADD assets/slurm-21.08.7.tar.bz2 /tmp
+ADD assets/slurm-21.08.7.tar.bz2 /tmp/slurm
+
 RUN apt-get update \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
@@ -53,9 +54,9 @@ RUN apt-get update \
     && apt-get autoremove -y && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* /tmp/library-scripts \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
-    && cd /tmp/slurm-21.08.7 \
+    && cd /tmp/slurm/slurm-21.08.7 \
     && ./configure --prefix=/usr/local --sysconfdir=/etc/slurm && make -j2 && make install \
-    && rm -rf /tmp/slurm-21.08.7 \
+    && rm -rf /tmp/slurm/slurm-21.08.7 \
     && useradd slurm \
     && mkdir -p /etc/slurm \
     /var/spool/slurm/ctld \
@@ -63,6 +64,6 @@ RUN apt-get update \
     /var/log/slurm \
     && chown slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
 
-RUN rm -rf /tmp/slurm*
+RUN rm -rf /tmp/slurm/slurm*
 
 USER rstudio
