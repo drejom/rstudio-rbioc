@@ -1,7 +1,6 @@
 # Set ARG defaults
 ARG VARIANT="RELEASE_3_14"
 ARG TZ="America/Los_Angeles"
-ARG ENABLE_SLURM="true"
 
 FROM bioconductor/bioconductor_docker:${VARIANT}
 
@@ -47,8 +46,7 @@ RUN wget https://github.com/dnanexus/dxfuse/releases/download/v0.23.2/dxfuse-lin
 
 # # Install SLURM
 ADD assets/slurm-21.08.7.tar.bz2 /tmp
-RUN if [ "${ENABLE_SLURM}" = "true" ]; then \
-    apt-get update \
+RUN apt-get update \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
     libmunge-dev libmunge2 munge libtool m4 automake \
