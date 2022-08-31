@@ -1,17 +1,10 @@
 # Set ARG defaults
-ARG VARIANT="RELEASE_3_14"
-ARG TZ="America/Los_Angeles"
+ARG VARIANT="RELEASE_3_15"
 
 FROM bioconductor/bioconductor_docker:${VARIANT}
 
-# Set some env vars
-ENV TZ=$TZ
-ENV LC_CTYPE=en_US.UTF-8
-ENV LC_ALL=en_US.UTF-8
-
 # Install additional OS packages 
 # fnmate and datapasta: ripgrep xsel
-USER root
 RUN apt-get update \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
@@ -26,14 +19,6 @@ RUN apt-get update \
     libudunits2-dev libgdal-dev libgeos-dev libproj-dev	\
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts
 
-# quarto
-RUN curl -LO https://github.com/quarto-dev/quarto-cli/releases/download/v1.1.113/quarto-1.1.113-linux-amd64.deb \
-    && apt-get update \
-    && export DEBIAN_FRONTEND=noninteractive \
-    && dpkg -i quarto*.deb \
-    && rm quarto*.deb \
-    && apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/library-scripts
-
 # DNAnexus DX toolkit
 RUN pip3 install --no-cache-dir \
     dxpy==v0.326.1 \
@@ -44,7 +29,7 @@ RUN wget https://github.com/dnanexus/dxfuse/releases/download/v0.23.2/dxfuse-lin
     && mv /usr/local/bin/dxfuse-linux /usr/local/bin/dxfuse \
     && chmod +x /usr/local/bin/dxfuse
 
-# # Install SLURM
+# Install SLURM
 ADD assets/slurm-21.08.7.tar.bz2 /tmp/slurm
 
 RUN apt-get update \
@@ -66,4 +51,5 @@ RUN apt-get update \
 
 RUN rm -rf /tmp/slurm/slurm*
 
-USER rstudio
+# Init command for s6-overlay
+CMD ["/init"]
