@@ -19,9 +19,9 @@ RUN apt-get update \
     libudunits2-dev libgdal-dev libgeos-dev libproj-dev	\
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts
 
-# DNAnexus DX toolkit
+# radian, DNAnexus DX toolkit
 RUN pip3 install --no-cache-dir \
-    dxpy==v0.326.1 \
+    dxpy radian \
     && rm -rf /tmp/downloaded_packages
 
 # Install dxfuse
